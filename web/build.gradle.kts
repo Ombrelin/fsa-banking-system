@@ -18,11 +18,46 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+tasks.named<Test>("test") {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+ktor {
+    docker {
+        jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+        localImageName.set("fsa-bank")
+        imageTag.set("0.0.1")
+        portMappings.set(
+            listOf(
+                io.ktor.plugin.features.DockerPortMapping(
+                    80,
+                    8080,
+                    io.ktor.plugin.features.DockerPortMappingProtocol.TCP
+                )
+            )
+        )
+        externalRegistry.set(
+            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+                appName = provider { "ktor-app" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
+    }
+}
 
 dependencies {
+
+    implementation("io.ktor:ktor-server-html-builder:2.3.2")
+    implementation("org.kodein.di:kodein-di:7.19.0")
+    implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.19.0")
+    implementation("org.ufoss.kotysa:kotysa-r2dbc:3.1.0")
     implementation("io.ktor:ktor-server-core-jvm:2.3.2")
     implementation("io.ktor:ktor-server-netty-jvm:2.3.2")
     implementation("ch.qos.logback:logback-classic:1.2.11")
+    runtimeOnly("org.postgresql:r2dbc-postgresql:1.0.1.RELEASE")
     testImplementation("io.ktor:ktor-server-tests-jvm:2.3.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
+    testImplementation("com.microsoft.playwright:playwright:1.35.0")
 }

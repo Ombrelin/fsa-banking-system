@@ -13,15 +13,11 @@ repositories {
 }
 
 dependencies {
-    constraints {
-        // Define dependency versions as constraints
-        implementation("org.apache.commons:commons-text:1.10.0")
-    }
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
 
 tasks.named<Test>("test") {

@@ -7,19 +7,22 @@ import java.math.BigDecimal
 
 class BankApplication(private val accountRepository: AccountRepository) {
 
-    fun createAccount(accountHolderName: String): Account{
+    suspend fun createAccount(accountHolderName: String): Account {
+        val account = Account(accountHolderName)
+        accountRepository.insert(account)
+
+        return account
+    }
+
+    suspend fun listAccounts(): Collection<Account> {
+        return accountRepository.getAll()
+    }
+
+    suspend fun paySalaries() {
         throw NotImplementedError()
     }
 
-    fun listAccounts(): Set<Account>{
-        throw NotImplementedError()
-    }
-
-    fun paySalaries() {
-        throw NotImplementedError()
-    }
-
-    fun addDebit(operationName: String, amountBigDecimal: BigDecimal): Operation {
+    suspend fun addDebit(operationName: String, amountBigDecimal: BigDecimal): Operation {
         throw NotImplementedError()
     }
 }

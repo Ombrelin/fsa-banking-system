@@ -1,0 +1,23 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=fsabank
+  fsabank:
+    container_name: fsabank
+    build:
+      dockerfile: web/Dockerfile
+      context: ..
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=fsabank
+      - DB_PASSWORD=password
+      - DB_USERNAME=postgres
+    ports:
+      - 5000:8080
