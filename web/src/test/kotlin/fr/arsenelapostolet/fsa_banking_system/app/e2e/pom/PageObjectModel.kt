@@ -6,7 +6,7 @@ abstract class PageObjectModel(val page: Page, val baseAppUrl: String) {
 
     abstract val path: String
 
-    fun goto(){
+    fun goto() {
         page.navigate("$baseAppUrl$path")
     }
 

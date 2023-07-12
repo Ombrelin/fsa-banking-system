@@ -1,7 +1,5 @@
 package fr.arsenelapostolet.fsa_banking_system.bank.entities
 
-import fr.arsenelapostolet.fsa_banking_system.bank.entities.Account
-import fr.arsenelapostolet.fsa_banking_system.bank.entities.Operation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -9,7 +7,7 @@ import java.math.BigDecimal
 class AccountTests {
 
     @Test
-    fun balance_computesSumOfOperations(){
+    fun balance_computesSumOfOperations() {
         // Given
         var account = Account(
             "Test Account",

@@ -1,10 +1,11 @@
-package fr.arsenelapostolet.fsa_banking_system.app.database
+package fr.arsenelapostolet.fsa_banking_system.app.database.repositories
 
+import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseAccounts
+import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseOperations
 import fr.arsenelapostolet.fsa_banking_system.app.database.entities.DatabaseAccount
 import fr.arsenelapostolet.fsa_banking_system.bank.entities.Account
 import fr.arsenelapostolet.fsa_banking_system.bank.persistance.AccountRepository
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toCollection
 import kotlinx.coroutines.flow.toList
 import org.ufoss.kotysa.PostgresqlR2dbcSqlClient
 
@@ -15,7 +16,20 @@ class PostgresAccountRepository(private val client: PostgresqlR2dbcSqlClient) : 
     }
 
     override suspend fun getByName(accountName: String): Account? {
-        throw NotImplementedError()
+        val record = (client
+                selectFrom DatabaseAccounts
+                where DatabaseAccounts.name eq accountName)
+            .fetchOneOrNull()
+
+        val operations = (client
+                selectFrom DatabaseOperations
+                where DatabaseOperations.accountname eq accountName
+                ).fetchAll()
+            .toList()
+            .map { it.toDomainEntity() }
+
+        return record
+            ?.toDomainEntity(operations)
     }
 
     override suspend fun getAll(): Collection<Account> {

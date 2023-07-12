@@ -50,6 +50,7 @@ ktor {
 dependencies {
 
     implementation("io.ktor:ktor-server-html-builder:2.3.2")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-css:1.0.0-pre.473")
     implementation("org.kodein.di:kodein-di:7.19.0")
     implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.19.0")
     implementation("org.ufoss.kotysa:kotysa-r2dbc:3.1.0")

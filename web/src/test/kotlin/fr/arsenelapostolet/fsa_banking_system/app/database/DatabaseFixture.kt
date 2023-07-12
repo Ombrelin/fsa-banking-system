@@ -1,8 +1,6 @@
 package fr.arsenelapostolet.fsa_banking_system.app.database
 
-import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseAccounts
 import io.r2dbc.spi.ConnectionFactories
-import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.ConnectionFactoryOptions.*
 import org.ufoss.kotysa.PostgresqlR2dbcSqlClient
 import org.ufoss.kotysa.r2dbc.coSqlClient
@@ -20,10 +18,11 @@ class DatabaseFixture {
                 .option(DATABASE, "fsabank")  // optional
                 .build()
         )
-        .coSqlClient(tables().postgresql(DatabaseAccounts))
+        .coSqlClient(tables().postgresql(DatabaseAccounts, DatabaseOperations))
 
     suspend fun migrate() {
         client createTable DatabaseAccounts
+        client createTable DatabaseOperations
     }
 
 }

@@ -6,7 +6,7 @@ class CreateAccountPageObjectModel(page: Page, baseAppUrl: String) : PageObjectM
     override val path: String
         get() = "/accounts/create"
 
-    fun createAccount(name: String){
+    fun createAccount(name: String) {
         page.fill("""input[type="text"][ name="holderName"]""", name)
         page.click("""input[type="submit"]""")
     }

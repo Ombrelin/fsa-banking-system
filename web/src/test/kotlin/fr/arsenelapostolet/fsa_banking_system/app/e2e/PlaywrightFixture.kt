@@ -20,7 +20,7 @@ class PlaywrightFixture : Closeable {
         else BrowserType.LaunchOptions().setHeadless(false).setSlowMo(500.0)
         browser = playwright!!.firefox().launch(browserTypeLaunchOptions)
 
-        if(!isContinuousIntegration){
+        if (!isContinuousIntegration) {
             context = browser!!.newContext(
                 Browser.NewContextOptions()
                     .setRecordVideoDir(Paths.get("videos"))
