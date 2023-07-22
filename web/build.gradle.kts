@@ -48,7 +48,7 @@ ktor {
 }
 
 dependencies {
-
+    implementation("ch.qos.logback:logback-classic:1.4.8")
     implementation("io.ktor:ktor-server-html-builder:2.3.2")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-css:1.0.0-pre.473")
     implementation("org.kodein.di:kodein-di:7.19.0")

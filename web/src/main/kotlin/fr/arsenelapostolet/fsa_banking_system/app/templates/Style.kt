@@ -18,6 +18,14 @@ internal fun CssBuilder.style() {
     }
     table {
         width = 100.pct
+        overflow = Overflow.scroll
+        display = Display.block
+        maxHeight = 18.rem
+    }
+
+
+    rule(".is-flex"){
+        gap = 1.rem
     }
 
     media("only screen and (max-width: 600px)") {

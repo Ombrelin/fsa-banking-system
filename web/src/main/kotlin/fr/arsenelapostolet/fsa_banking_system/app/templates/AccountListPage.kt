@@ -24,27 +24,46 @@ internal fun FlowContent.accountListPage(accounts: Collection<Account>) {
                     accounts.map {
                         tr {
                             td { +it.name }
-                            td("is-flex is-align-content-space-between") {
-                                a(href="/accounts/${it.name}"){
-                                    button(classes = "button") {
-                                        +"View"
+                            td(classes = "is-flex is-justify-content-space-between") {
+                                div {
+                                    a(href = "/accounts/${it.name}") {
+                                        button(classes = "button") {
+                                            +"View"
+                                        }
                                     }
                                 }
-                                button(classes = "button is-danger") {
-                                    +"Delete"
+                                div {
+                                    button(classes = "button is-danger") {
+                                        +"Delete"
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            div(classes = "is-flex is-align-content-space-between") {}
-            button(classes = "button") {
-                +"Pay salaries"
-            }
-            a(href = "/accounts/create") {
-                button(classes = "button is-primary") {
-                    +"Create new account"
+            div(classes = "columns is-mobile is-flex-wrap-wrap") {
+                div(classes = "column") {
+                    form(action = "/accounts/paySalaries", method = FormMethod.post) {
+                        button(classes = "button", type = ButtonType.submit) {
+                            +"Pay salaries"
+                        }
+                    }
+                }
+
+                div(classes = "column") {
+                    a(href = "/ranks") {
+                        button(classes = "button") {
+                            +"Manage Ranks"
+                        }
+                    }
+                }
+                div(classes = "column") {
+                    a(href = "/accounts/create") {
+                        button(classes = "button is-primary") {
+                            +"Create new account"
+                        }
+                    }
                 }
             }
         }

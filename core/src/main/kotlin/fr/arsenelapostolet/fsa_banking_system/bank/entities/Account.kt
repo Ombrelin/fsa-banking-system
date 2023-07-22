@@ -3,9 +3,9 @@ package fr.arsenelapostolet.fsa_banking_system.bank.entities
 import fr.arsenelapostolet.fsa_banking_system.bank.entities.Operation.OperationKind
 import java.math.BigDecimal
 
-class Account(val name: String, val operations: List<Operation>) {
+class Account(val name: String, var rankName: String, val operations: List<Operation>) {
 
-    constructor(name: String) : this(name, listOf())
+    constructor(name: String, rankName: String) : this(name, rankName, listOf())
 
     val balance: BigDecimal
         get() = operations.sumOf {

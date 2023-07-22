@@ -22,6 +22,33 @@ fun Application.configureRouting() {
                 style()
             }
         }
+        post("/accounts/paySalaries"){
+            val bankingApp by closestDI().instance<BankApplication>()
+
+            bankingApp.paySalaries()
+            call.respondRedirect("/accounts", permanent = true)
+        }
+        post("/accounts/{accountName}/rank"){
+            val accountName = call.parameters["accountName"]
+            val formParameters = call.receiveParameters()
+            val bankingApp by closestDI().instance<BankApplication>()
+            val rank = formParameters["rank"]
+
+            if (accountName == null || rank == null ) {
+                call.respondHtml(HttpStatusCode.BadRequest) {
+                    body {
+                        p {
+                            "accountName and rank are required"
+                        }
+                    }
+                }
+            }
+            else {
+                bankingApp.promoteAccount(accountName, rank)
+                call.respondRedirect("/accounts/${accountName}", permanent = true)
+            }
+
+        }
         get("/accounts/{accountName}") {
             val bankingApp by closestDI().instance<BankApplication>()
             val accountName = call.parameters["accountName"]
@@ -48,10 +75,11 @@ fun Application.configureRouting() {
                 }
             }
 
+            val ranks = bankingApp.listRanks()
 
             call.respondHtmlTemplate(PageTemplate(), HttpStatusCode.OK) {
                 content {
-                    accountDetailsPage(account!!)
+                    accountDetailsPage(account!!, ranks)
                 }
             }
         }
@@ -79,9 +107,12 @@ fun Application.configureRouting() {
             }
         }
         get("/accounts/create") {
+            val bankingApp by closestDI().instance<BankApplication>()
+            val ranks = bankingApp.listRanks()
+
             call.respondHtmlTemplate(PageTemplate(), HttpStatusCode.OK) {
                 content {
-                    createAccountPage()
+                    createAccountPage(ranks)
                 }
             }
         }
@@ -90,17 +121,48 @@ fun Application.configureRouting() {
             val bankingApp by closestDI().instance<BankApplication>()
 
             val holderName = formParameters["holderName"]
-            if (holderName == null) {
+            val rank = formParameters["rank"]
+            if (holderName == null || rank == null) {
                 call.respondHtml(HttpStatusCode.BadRequest) {
                     body {
                         p {
-                            "holderName is required"
+                            "holderName and rank are required"
                         }
                     }
                 }
             } else {
-                bankingApp.createAccount(holderName!!)
+                bankingApp.createAccount(holderName, rank)
                 call.respondRedirect("/accounts", permanent = true)
+            }
+        }
+        get("/ranks") {
+            val bankingApp by closestDI().instance<BankApplication>()
+            val ranks = bankingApp.listRanks()
+
+            call.respondHtmlTemplate(PageTemplate(), HttpStatusCode.OK) {
+                content {
+                    ranksPage(ranks)
+                }
+            }
+        }
+        post("/ranks/create") {
+            val formParameters = call.receiveParameters()
+            val bankingApp by closestDI().instance<BankApplication>()
+
+            val rankName = formParameters["rankName"]
+            val rankSalary = formParameters["rankSalary"]
+
+            if (rankName == null || rankSalary == null) {
+                call.respondHtml(HttpStatusCode.BadRequest) {
+                    body {
+                        p {
+                            "rankName and rankSalary are required"
+                        }
+                    }
+                }
+            } else {
+                bankingApp.createRank(rankName, BigDecimal(rankSalary))
+                call.respondRedirect("/ranks", permanent = true)
             }
         }
     }

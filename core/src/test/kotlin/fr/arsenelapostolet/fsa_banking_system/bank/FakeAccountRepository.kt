@@ -8,10 +8,13 @@ class FakeAccountRepository : AccountRepository {
     val data: MutableMap<String, Account> = HashMap()
 
     override suspend fun insert(account: Account) {
-        data[account.name] = account;
+        data[account.name] = account
     }
 
     override suspend fun getByName(accountName: String): Account? = data[accountName]
 
     override suspend fun getAll(): Collection<Account> = data.values
+    override suspend fun updateAccount(account: Account) {
+        data[account.name] = account
+    }
 }

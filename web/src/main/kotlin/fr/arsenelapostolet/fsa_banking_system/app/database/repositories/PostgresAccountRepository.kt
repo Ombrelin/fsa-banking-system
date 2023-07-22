@@ -38,4 +38,12 @@ class PostgresAccountRepository(private val client: PostgresqlR2dbcSqlClient) : 
             .map { it.toDomainEntity() }
             .toList()
     }
+
+    override suspend fun updateAccount(account: Account) {
+        (client
+                update DatabaseAccounts
+                set DatabaseAccounts.rankname eq account.rankName
+                where DatabaseAccounts.name eq account.name
+        ).execute()
+    }
 }

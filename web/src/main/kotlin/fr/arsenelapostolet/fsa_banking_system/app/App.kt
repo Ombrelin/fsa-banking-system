@@ -2,11 +2,14 @@ package fr.arsenelapostolet.fsa_banking_system.app
 
 import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseAccounts
 import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseOperations
+import fr.arsenelapostolet.fsa_banking_system.app.database.DatabaseRanks
 import fr.arsenelapostolet.fsa_banking_system.app.database.repositories.PostgresAccountRepository
 import fr.arsenelapostolet.fsa_banking_system.app.database.repositories.PostgresOperationRepository
+import fr.arsenelapostolet.fsa_banking_system.app.database.repositories.PostgresRankRepository
 import fr.arsenelapostolet.fsa_banking_system.bank.BankApplication
 import fr.arsenelapostolet.fsa_banking_system.bank.persistance.AccountRepository
 import fr.arsenelapostolet.fsa_banking_system.bank.persistance.OperationRepository
+import fr.arsenelapostolet.fsa_banking_system.bank.persistance.RankRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -40,7 +43,7 @@ fun main() {
                             .option(ConnectionFactoryOptions.DATABASE, System.getenv("DB_NAME"))
                             .build()
                     )
-                    .coSqlClient(tables().postgresql(DatabaseAccounts, DatabaseOperations))
+                    .coSqlClient(tables().postgresql(DatabaseAccounts, DatabaseOperations, DatabaseRanks))
             }
             bind<AccountRepository> {
                 singleton {
@@ -52,16 +55,24 @@ fun main() {
                     PostgresOperationRepository(instance())
                 }
             }
-            bind<BankApplication> {
+            bind<RankRepository> {
                 singleton {
-                    BankApplication(instance(), instance())
+                    PostgresRankRepository(instance())
                 }
             }
+            bind<BankApplication> {
+                singleton {
+                    BankApplication(instance(), instance(), instance())
+                }
+            }
+
         }
         runBlocking {
             val client by closestDI().instance<R2dbcSqlClient>()
+            client createTable DatabaseRanks
             client createTable DatabaseAccounts
             client createTable DatabaseOperations
+
         }
         configureRouting()
     }.start(wait = true)

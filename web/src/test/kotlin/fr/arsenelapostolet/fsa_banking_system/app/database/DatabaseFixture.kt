@@ -18,9 +18,10 @@ class DatabaseFixture {
                 .option(DATABASE, "fsabank")  // optional
                 .build()
         )
-        .coSqlClient(tables().postgresql(DatabaseAccounts, DatabaseOperations))
+        .coSqlClient(tables().postgresql(DatabaseRanks, DatabaseAccounts, DatabaseOperations))
 
     suspend fun migrate() {
+        client createTable DatabaseRanks
         client createTable DatabaseAccounts
         client createTable DatabaseOperations
     }

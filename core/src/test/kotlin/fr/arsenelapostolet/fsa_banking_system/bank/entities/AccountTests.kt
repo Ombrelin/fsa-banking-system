@@ -9,8 +9,9 @@ class AccountTests {
     @Test
     fun balance_computesSumOfOperations() {
         // Given
-        var account = Account(
+        val account = Account(
             "Test Account",
+            "test rank",
             listOf(
                 Operation(Operation.OperationKind.CREDIT, BigDecimal(10)),
                 Operation(Operation.OperationKind.DEBIT, BigDecimal(5.5)),
